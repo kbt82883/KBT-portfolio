@@ -1,6 +1,6 @@
 # Portfolio
 
-**Live:** https://yuntyu01.github.io/PORTFOLIO/
+**Live:** https://kbt82883.github.io/KBT-portfolio/
 
 단일 HTML 파일(`PORTFOLIO.html`)로 만든 개인 포트폴리오 페이지입니다. GitHub Pages로 배포됩니다.
 
