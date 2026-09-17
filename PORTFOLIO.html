@@ -332,8 +332,11 @@ body.editing .arch{position:relative}
   .case h3 + .sect{margin-top:16px}
   .case ul li{margin-bottom:5px;line-height:1.62}
   .tblwrap{margin:2px 0 8px}
-  /* 블로그 링크는 마지막 불릿에 바짝 붙이고, 링크 앞에서 장이 갈리지 않게 한다 */
-  .post-link{margin-top:4px;break-before:avoid}
+  /* 근거 링크는 남은 공간을 사용한다. 마지막 링크만 별도 페이지로 밀리지 않게 한다 */
+  .post-link{margin-top:4px;break-before:auto}
+  #houme-image-generation .row:last-of-type .case{padding-bottom:10px}
+  #houme-image-generation .row:last-of-type .case ul li{margin-bottom:3px;line-height:1.55}
+  #houme-image-generation .row:last-of-type .sect{margin:11px 0 5px}
 
   /* 트리 레일: 인쇄에서는 미디어쿼리가 '창 폭' 기준이라 슬림 모드가 안 걸린다.
      화면(넓은 창)과 같은 바깥쪽 좌표를 여기서 그대로 고정한다. */
