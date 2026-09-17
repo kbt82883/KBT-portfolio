@@ -160,6 +160,8 @@ b,strong{font-weight:700;color:var(--ink)}
 .arch{max-width:100%;margin-inline:auto}
 .arch img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:10px;
   background:#fff;cursor:zoom-in}
+.evidence{margin-top:20px}
+.evidence figcaption{margin-top:9px;font-size:13px;line-height:1.65;color:var(--faint)}
 
 /* ══════════ 주요 작업 ══════════ */
 .case{border:1px solid var(--line);border-radius:12px;padding:24px 26px}
@@ -426,6 +428,10 @@ body.editing .arch{position:relative}
           <li>이미지 생성 5건과 <span class="code">GET /api/v1/landings</span>를 함께 호출했을 때 조회 API p95가 <b>19.63ms → 34.90ms</b>로 상승</li>
           <li>같은 구간의 G1 Evacuation Pause가 약 15ms로 유사해, <b>GC pause가 일반 API의 tail latency에 영향을 줄 수 있음</b>을 검증</li>
         </ul>
+        <figure class="arch evidence">
+          <img class="zoomable" src="assets/02-repeated-load-jvm-heap-recovery.png" alt="반복 이미지 생성 부하와 idle 구간에서 Old Gen, Heap after GC, Live Data의 변화를 보여주는 Grafana 대시보드" loading="lazy">
+          <figcaption>반복 이미지 생성 후 idle 구간에서 Old Gen·Heap after GC·Live Data가 함께 하락해, Old 영역 객체의 지속 누적이 아닌 일시적 대용량 할당 문제임을 확인했습니다.</figcaption>
+        </figure>
       </section>
     </div>
 
@@ -452,6 +458,10 @@ body.editing .arch{position:relative}
             </tbody>
           </table>
         </div>
+        <figure class="arch evidence">
+          <img class="zoomable" src="assets/06-image-input-ab-test-gc-activity.png" alt="이미지 입력 최적화 A/B 부하 실험에서 G1 Compaction Pause, Evacuation Pause, Humongous Allocation을 관측한 Grafana 대시보드" loading="lazy">
+          <figcaption>이미지 입력 최적화 A/B 부하 실험에서 G1 GC Activity를 관측했습니다. 정량 결과와 함께 Humongous Allocation·Compaction Pause를 줄여야 했던 근거를 제시합니다.</figcaption>
+        </figure>
       </section>
     </div>
 
