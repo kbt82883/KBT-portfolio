@@ -441,7 +441,7 @@ body.editing .arch{position:relative}
         <p class="sect">가설과 해결</p>
         <ul>
           <li>GC 옵션만 조정하면 이미 할당된 대형 객체의 수집 시점만 바뀌므로, <b>GC 대상인 원본 이미지와 Base64 문자열 자체를 줄이는 방식</b>을 우선 검증</li>
-          <li>이용량이 적은 <b>새벽 4시</b>에 스케줄러가 대상 이미지를 순회(sweep)해 WebP 파생 이미지를 미리 생성해 저장하고, 이미지 생성 요청에서는 저장된 최적화 이미지를 재사용하도록 입력 경로를 개선</li>
+          <li>이용량이 적은 새벽 4시에 스케줄러가 대상 이미지를 순회(sweep)해 WebP 파생 이미지를 미리 생성해 저장하고, <b>이미지 생성 요청에서는 저장된 최적화 이미지를 재사용</b>하도록 입력 경로를 개선</li>
           <li>동일한 Gemini V4 요청을 동시 5건씩 3회 실행해 기존 원본 전달 모드와 최적화 전달 모드를 비교</li>
         </ul>
         <p class="sect">A/B 결과</p>
@@ -470,11 +470,12 @@ body.editing .arch{position:relative}
         <h3>3. 운영 안정성을 우선한 선택: Adaptive G1 유지</h3>
         <p class="sect">의사결정</p>
         <ul>
-          <li>입력 최적화 이후 IHOP 30% 및 40%와 기본 Adaptive G1을 비교했으나, 고정 IHOP는 메모리 여유와 누적 pause 사이의 트레이드오프가 있었습니다.</li>
+          <li>입력 최적화 이후 IHOP 30% 및 40%와 기본 Adaptive G1을 비교했으나, <b>고정 IHOP는 메모리 여유와 누적 pause 사이의 트레이드오프</b>가 있었습니다.</li>
           <li>특정 GC 옵션을 일괄 적용하는 대신, <b>입력 최적화를 우선 배포하고 기본 Adaptive G1을 유지</b>하는 것이 운영 위험이 낮다고 판단했습니다.</li>
         </ul>
         <p class="sect">운영 계획</p>
         <ul>
+          <li>반복 부하, 일반 API 간섭, 이미지 입력 A/B, IHOP 비교를 위한 k6 시나리오와 실행 오버라이드, 중단 및 해석 기준 문서를 <b>스프린트마다 동일 조건으로 재검증할 수 있는 perf 운영 자산</b>으로 정리</li>
           <li>Grafana에서 Old Gen과 Heap after GC, Live Data, GC pause, 일반 API p95/p99 및 Swap in/out을 지속 관측</li>
           <li>Old Gen이 70~80% 이상에서 지속 상승하거나 Full GC, evacuation failure 또는 tail latency 악화가 반복될 때 G1 옵션 A/B 테스트를 재개</li>
         </ul>
