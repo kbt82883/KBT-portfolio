@@ -415,9 +415,10 @@ body.editing .arch{position:relative}
 
     <div class="row">
       <div class="callout">
-        <p class="co-label">문제</p>
-        <p class="co-line">이미지 생성과 일반 도메인 API를 하나의 JVM에서 처리하는 모놀리식 구조에서, 참고 이미지 원본 <span class="code">byte[]</span>, Base64 문자열 및 Gemini 요청 버퍼가 동시에 생성됐습니다.</p>
-        <p class="co-line">대형 객체가 G1의 Humongous 영역을 점유하면 GC pause가 발생하고, 이미지 생성과 무관한 조회 API의 tail latency까지 악화될 위험이 있었습니다.</p>
+        <p class="co-label">상황과 문제</p>
+        <p class="co-line"><b>Dev 환경에서 AI 이미지 생성 기능을 QA하던 중 JVM 힙 사용률이 3분 이상 80%를 넘는 경고가 반복 발생</b>했습니다.</p>
+        <p class="co-line">이미지 생성과 일반 조회 API를 하나의 JVM에서 처리하는 모놀리식 구조였기 때문에, 이미지 처리 부하가 GC pause를 거쳐 일반 API의 tail latency까지 악화시킬 위험이 있었습니다.</p>
+        <p class="co-line">참고 이미지 원본 <span class="code">byte[]</span>, Base64 문자열 및 Gemini 요청 버퍼가 동시에 생성되며, 대형 객체가 G1의 Humongous 영역을 점유해 GC 회수 효율을 낮출 가능성이 있었습니다.</p>
       </div>
     </div>
 
