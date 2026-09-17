@@ -460,7 +460,7 @@ body.editing .arch{position:relative}
         </div>
         <figure class="arch evidence">
           <img class="zoomable" src="assets/06-image-input-ab-test-gc-activity.png" alt="이미지 입력 최적화 A/B 부하 실험에서 G1 Compaction Pause, Evacuation Pause, Humongous Allocation을 관측한 Grafana 대시보드" loading="lazy">
-          <figcaption>이미지 입력 최적화 A/B 부하 실험에서 G1 GC Activity를 관측했습니다. 정량 결과와 함께 Humongous Allocation·Compaction Pause를 줄여야 했던 근거를 제시합니다.</figcaption>
+          <figcaption>원본 이미지 전달 부하 구간에서는 Humongous Allocation과 Compaction Pause가 반복적으로 관측됐습니다. 입력 최적화 후 Humongous GC는 28회에서 1회로, Major/Compaction GC는 7회에서 0회로 감소했습니다.</figcaption>
         </figure>
       </section>
     </div>
