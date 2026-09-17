@@ -379,9 +379,9 @@ body.editing .arch{position:relative}
         <p class="who">구본탁, Backend Engineer</p>
       </div>
       <div class="cover-actions">
-        <button class="edit-btn" id="editToggle" type="button" aria-pressed="false">수정</button>
+        <!-- <button class="edit-btn" id="editToggle" type="button" aria-pressed="false">수정</button> -->
         <a class="pdf-link" href="#" onclick="window.print();return false">PDF 저장</a>
-        <a class="pdf-link" href="#" id="htmlDownload">HTML 다운로드</a>
+        <!-- <a class="pdf-link" href="#" id="htmlDownload">HTML 다운로드</a> -->
       </div>
     </div>
     <hr class="cover-rule">
@@ -461,11 +461,11 @@ body.editing .arch{position:relative}
             <thead><tr><th>지표</th><th>원본 전달</th><th>최적화 전달</th><th>개선</th></tr></thead>
             <tbody>
               <tr><td>Gemini 전달 Base64 크기</td><td>14.97MiB</td><td>0.29MiB</td><td><b>98% 감소</b></td></tr>
-              <tr><td>평균 힙 할당량</td><td>484.3MiB</td><td>216.7MiB</td><td><b>55.3% 감소</b></td></tr>
+              <tr class="pickb"><td>평균 힙 할당량</td><td>484.3MiB</td><td>216.7MiB</td><td><b>55.3% 감소</b></td></tr>
               <tr><td>전체 GC 횟수</td><td>39회</td><td>3회</td><td><b>92.3% 감소</b></td></tr>
               <tr><td>Humongous GC</td><td>28회</td><td>1회</td><td><b>96.4% 감소</b></td></tr>
               <tr><td>GC pause 합계</td><td>1.96초</td><td>0.15초</td><td><b>92.4% 감소</b></td></tr>
-              <tr class="pickb"><td>Major/Compaction GC</td><td>7회</td><td>0회</td><td><b>제거</b></td></tr>
+              <tr><td>Major/Compaction GC</td><td>7회</td><td>0회</td><td><b>제거</b></td></tr>
             </tbody>
           </table>
         </div>
