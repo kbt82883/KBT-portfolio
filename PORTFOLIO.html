@@ -162,6 +162,13 @@ b,strong{font-weight:700;color:var(--ink)}
   background:#fff;cursor:zoom-in}
 .evidence{margin-top:20px}
 .evidence figcaption{margin-top:9px;font-size:13px;line-height:1.65;color:var(--faint)}
+.harness-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.harness-step{position:relative;border:1px solid var(--line);border-radius:10px;padding:15px 16px;background:var(--bg)}
+.harness-step:not(:last-child)::after{content:"→";position:absolute;right:-17px;top:50%;transform:translateY(-50%);z-index:1;color:var(--faint);font-size:18px}
+.harness-step b{display:block;font-size:14px;color:var(--ink);margin-bottom:5px}
+.harness-step span{display:block;font-size:13px;line-height:1.6;color:var(--body)}
+.harness-code{margin-top:14px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--bg2);font:12.5px/1.7 var(--mono);color:var(--ink);white-space:pre-wrap}
+@media(max-width:600px){.harness-flow{grid-template-columns:1fr;gap:18px}.harness-step:not(:last-child)::after{right:auto;left:50%;top:auto;bottom:-19px;transform:translateX(-50%) rotate(90deg)}}
 
 /* ══════════ 주요 작업 ══════════ */
 .case{border:1px solid var(--line);border-radius:12px;padding:24px 26px}
@@ -534,6 +541,24 @@ body.editing .arch{position:relative}
             </tbody>
           </table>
         </div>
+        <p class="sect">요청 분류와 컨텍스트 생성 방식</p>
+        <div class="harness-flow" aria-label="Agent Harness의 요청 분류와 컨텍스트 생성 흐름">
+          <div class="harness-step"><b>1. 요청 분류</b><span>Skill이 자연어 요청에서 도메인, 변경 유형, 검색 키워드를 추출</span></div>
+          <div class="harness-step"><b>2. 파일 우선순위 계산</b><span>파일명, 코드 내용, 도메인 패키지, 계층, 테스트 여부에 가중치 적용</span></div>
+          <div class="harness-step"><b>3. 컨텍스트 JSON 생성</b><span>규칙, 우선 파일, API 계약, 테스트, 검증 명령을 에이전트에 제공</span></div>
+        </div>
+        <pre class="harness-code" aria-label="요청 분류와 컨텍스트 생성 의사코드">request = classify(text)
+# { domain, changeType, searchTerms }
+
+candidates = rankFiles(repository, request.searchTerms,
+  weights=[fileName, content, domain, layer, test])
+
+context = {
+  rules: findApplicableAgents(candidates),
+  priorityFiles: topRanked(candidates),
+  endpoints: extractApiContracts(candidates),
+  validation: selectValidationCommands(request.domain)
+}</pre>
       </section>
     </div>
 
