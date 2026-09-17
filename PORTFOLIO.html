@@ -484,6 +484,96 @@ body.editing .arch{position:relative}
     </div>
   </article>
 
+  <article class="pj" id="clustar-agent-harness">
+    <div class="phead">
+      <div class="pmeta">
+        <div class="titlerow"><h2 class="pj-title">Clustar Agent Harness</h2></div>
+        <div class="tm">Clustar 2차 스프린트, AI 에이전트 기반 API 변경 작업의 컨텍스트 최적화</div>
+      </div>
+      <button class="drag" aria-label="드래그해서 순서 변경" title="끌어서 순서 변경">
+        <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"></circle><circle cx="15" cy="6" r="1.7"></circle><circle cx="9" cy="12" r="1.7"></circle><circle cx="15" cy="12" r="1.7"></circle><circle cx="9" cy="18" r="1.7"></circle><circle cx="15" cy="18" r="1.7"></circle></svg>
+      </button>
+    </div>
+
+    <p class="pitch">API 변경 요청을 저장소 구조와 검증 기준에 연결하는 Agent Harness를 구축해, AI 에이전트의 불필요한 탐색과 토큰 사용을 줄인 문제 해결</p>
+
+    <div class="bignums">
+      <div class="bn"><div class="v">23.7% ↓</div><div class="k">전체 입출력 토큰</div></div>
+      <div class="bn"><div class="v">57.7% ↓</div><div class="k">구현 전 탐색 호출</div></div>
+      <div class="bn"><div class="v">33.7% ↓</div><div class="k">구현 시작 시간</div></div>
+    </div>
+
+    <div class="tags"><span class="tag">AI Agent</span><span class="tag">Context Engineering</span><span class="tag">AGENTS.md</span><span class="tag">JSON</span><span class="tag">API Testing</span><span class="tag">A/B Test</span><span class="tag">Gradle</span></div>
+
+    <div class="row">
+      <div class="callout">
+        <p class="co-label">문제</p>
+        <p class="co-line">API 수정 요청마다 에이전트가 관련 없는 모듈까지 넓게 탐색하고, 이미 확인한 규칙과 파일을 반복해서 읽으면서 컨텍스트 입력과 구현 시작 시간이 늘어났습니다.</p>
+        <p class="co-line"><b>최근 API 변경 이슈 5건의 작업 로그</b>를 분석한 결과, 구현 능력보다 자연어 요청을 실제 도메인, 소스 파일, 테스트 및 검증 명령으로 연결하는 탐색 과정에서 더 큰 비용이 발생했습니다.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <section class="case">
+        <h3>1. 정적 규칙과 작업별 컨텍스트를 분리하는 Harness 설계</h3>
+        <p class="sect">대안 비교와 결정</p>
+        <ul>
+          <li>상위 모델 사용은 비용을 높이고, 프롬프트 템플릿 강화는 개발자가 매번 관련 정보를 직접 작성해야 했습니다.</li>
+          <li><span class="code">AGENTS.md</span>는 공통 아키텍처 계약으로 유지하되, 요청별 파일 범위까지 담으면 규칙 자체가 비대해지는 한계가 있었습니다.</li>
+          <li>따라서 공통 규칙은 유지하고, <b>각 API 변경 요청에 필요한 컨텍스트만 동적으로 선별하는 Agent Harness</b>를 구축했습니다.</li>
+        </ul>
+        <p class="sect">처리 흐름</p>
+        <div class="tblwrap">
+          <table>
+            <thead><tr><th>단계</th><th>처리</th></tr></thead>
+            <tbody>
+              <tr><td>1. 요청 분류</td><td>Skill이 자연어 요청의 도메인과 변경 유형을 분류</td></tr>
+              <tr><td>2. 컨텍스트 생성</td><td>전처리 스크립트가 규칙, 우선 파일, API 계약, 테스트를 수집해 JSON 생성</td></tr>
+              <tr><td>3. 구현과 검증</td><td>에이전트가 선별된 시작점부터 구현하고 관련 테스트 후 전체 빌드로 검증</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <div class="row">
+      <section class="case">
+        <h3>2. 과거 API 변경 이슈 5건으로 Harness 효과를 A/B 검증</h3>
+        <p class="sect">실험 통제</p>
+        <ul>
+          <li>동일한 모델, 요청 내용, 기준 커밋, 최종 검증 명령을 유지하고 기존 정답을 참조하지 못하도록 Git 이력과 원격 저장소 접근을 제한했습니다.</li>
+          <li>A는 기존 <span class="code">AGENTS.md</span> 기반, B는 <span class="code">AGENTS.md</span>와 API 변경 Harness를 함께 적용했습니다.</li>
+        </ul>
+        <p class="sect">결과</p>
+        <div class="tblwrap">
+          <table>
+            <thead><tr><th>지표</th><th>기존 방식</th><th>Harness 적용</th><th>개선</th></tr></thead>
+            <tbody>
+              <tr><td>전체 입출력 토큰</td><td>3,882,816</td><td>2,963,245</td><td><b>23.7% 감소</b></td></tr>
+              <tr><td>비캐시 입력 토큰</td><td>266,186</td><td>207,866</td><td><b>21.9% 감소</b></td></tr>
+              <tr><td>탐색 호출 평균</td><td>7.8회</td><td>3.3회</td><td><b>57.7% 감소</b></td></tr>
+              <tr><td>구현 전 확인 파일 경로</td><td>11.2개</td><td>4.1개</td><td><b>63.4% 감소</b></td></tr>
+              <tr><td>구현 시작 시간</td><td>65.6초</td><td>43.5초</td><td><b>33.7% 단축</b></td></tr>
+              <tr class="pickb"><td>전체 실행 시간</td><td>149.7초</td><td>122.1초</td><td><b>18.4% 단축</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <div class="row">
+      <section class="case">
+        <h3>3. 일회성 프롬프트 개선을 넘어 팀의 개발 환경으로 정착</h3>
+        <p class="sect">해석과 운영 효과</p>
+        <ul>
+          <li>출력 토큰은 0.6%만 감소한 반면 입력과 전체 토큰은 크게 줄어, 구현 결과를 축소한 것이 아니라 <b>구현 전 불필요한 탐색과 컨텍스트 수집을 줄인 효과</b>임을 확인했습니다.</li>
+          <li>후보 파일을 절대적인 허용 목록이 아닌 우선순위가 높은 시작점으로 정의해, import 관계와 실패한 테스트, 미충족 요구사항이 있을 때만 탐색 범위를 확장했습니다.</li>
+          <li>요청 유형별 작업 로그를 축적해 Harness의 누락과 오탐을 지속적으로 개선할 수 있는, 특정 모델에 의존하지 않는 팀 공통 개발 환경을 마련했습니다.</li>
+        </ul>
+      </section>
+    </div>
+  </article>
+
   <!-- ╔══════════════════════════════════════════════════════════╗
        ║  프로젝트 블록 ①  KoDeploy                                ║
        ╚══════════════════════════════════════════════════════════╝ -->
